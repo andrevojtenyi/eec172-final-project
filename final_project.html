@@ -7,23 +7,37 @@
     body {
       font-family: Arial, sans-serif;
       background-color: #f5f5f5;
-      padding: 40px;
-      max-width: 800px;
-      margin: auto;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    .main-content {
+      flex: 2;
+      max-width: 600px;
+    }
+
+    .sidebar {
+      flex: 1;
+      margin-left: 40px;
     }
 
     h1, h2, h3, p {
-      text-align: left;
       color: #333;
     }
 
     h1 {
-      font-size: 2.5em;
+      font-size: 2.2em;
       margin-bottom: 0.2em;
     }
 
     h2 {
-      font-size: 1.3em;
+      font-size: 1.2em;
       font-weight: normal;
       color: #555;
       margin-bottom: 1em;
@@ -57,80 +71,127 @@
       margin-top: 1.5em;
       margin-bottom: 0.3em;
       color: #444;
-      padding-left: 1em;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .leaderboard {
+      margin-top: 40px;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .leaderboard h3 {
+      margin-top: 0;
+    }
+
+    .leaderboard ul {
+      padding-left: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>Dual Control Pong</h1>
-  <h2>EEC 172 Spring 2025 Final Project</h2>
 
-  <h3>Project Summary</h3>
-  <p>
-    This project implements a dual-controller Pong game on the CC3200 microcontroller, using an LED matrix display, an accelerometer, an IR remote, and cloud integration via AWS. The system is modular and thoroughly documented to enable reproducibility.
-  </p>
+  <div class="container">
+    <div class="main-content">
+      <h1>Dual Control Pong</h1>
+      <h2>EEC 172 Spring 2025 Final Project</h2>
 
-  <h3>Program Flow</h3>
-  <p>
-    The game initializes by setting up a visual interface: two paddles, a dashed midline, a ball, and a score display. Gameplay logic is physics-based: the ball bounces off walls and paddles, with increasing speed and directional variation based on paddle velocity at impact. Scoring triggers a board reset and continues until one player reaches the target score. After a win, the player enters a three-letter name using an IR remote, which is displayed live on the LED and submitted via AWS to a cloud-based leaderboard.
-  </p>
+      <h3>Project Summary</h3>
+      <p>
+        This project implements a dual-controller Pong game on the CC3200 microcontroller, using an LED matrix display, an accelerometer, an IR remote, and cloud integration via AWS. The system is modular and thoroughly documented to enable reproducibility.
+      </p>
 
-  <h3>Functional Components</h3>
+      <h3>Program Flow</h3>
+      <p>
+        The game initializes by setting up a visual interface: two paddles, a dashed midline, a ball, and a score display. Gameplay logic is physics-based: the ball bounces off walls and paddles, with increasing speed and directional variation based on paddle velocity at impact. Scoring triggers a board reset and continues until one player reaches the target score. After a win, the player enters a three-letter name using an IR remote, which is displayed live on the LED and submitted via AWS to a cloud-based leaderboard.
+      </p>
 
-  <p class="subheader">I2C (Accelerometer - Player 1)</p>
-  <ul>
-    <li>Uses I2C communication to continuously poll X-axis tilt data.</li>
-    <li>Converts tilt into paddle movement for Player 1.</li>
-    <li>Ignores minor movements to prevent jitter.</li>
-  </ul>
+      <h3>Functional Components</h3>
 
-  <p class="subheader">SPI (LED Matrix Display)</p>
-  <ul>
-    <li>Renders ball, paddles, midline, score, and prompts on the display.</li>
-    <li>Uses Adafruit graphics library functions (e.g., <code>drawChar</code>, <code>fillRect</code>).</li>
-    <li>Clears and redraws objects to simulate motion.</li>
-  </ul>
+      <p class="subheader">I2C (Accelerometer - Player 1)</p>
+      <ul>
+        <li>Uses I2C communication to continuously poll X-axis tilt data.</li>
+        <li>Converts tilt into paddle movement for Player 1.</li>
+        <li>Ignores minor movements to prevent jitter.</li>
+      </ul>
 
-  <p class="subheader">IR (Remote Input - Player 2 & Name Entry)</p>
-  <ul>
-    <li>Decodes IR signals to control Player 2’s paddle (UP/DOWN).</li>
-    <li>Implements multi-tap text input for name entry.</li>
-    <li>Supports character cycling, deletion, and confirmation via remote buttons.</li>
-  </ul>
+      <p class="subheader">SPI (LED Matrix Display)</p>
+      <ul>
+        <li>Renders ball, paddles, midline, score, and prompts on the display.</li>
+        <li>Uses Adafruit graphics library functions (e.g., <code>drawChar</code>, <code>fillRect</code>).</li>
+        <li>Clears and redraws objects to simulate motion.</li>
+      </ul>
 
-  <p class="subheader">AWS (Cloud Leaderboard Integration)</p>
-  <ul>
-    <li>Connects to Wi-Fi using SimpleLink stack.</li>
-    <li>Sends winner’s name to AWS IoT via HTTPS POST.</li>
-    <li>AWS Rule updates Google Sheets-based leaderboard.</li>
-  </ul>
+      <p class="subheader">IR (Remote Input - Player 2 & Name Entry)</p>
+      <ul>
+        <li>Decodes IR signals to control Player 2’s paddle (UP/DOWN).</li>
+        <li>Implements multi-tap text input for name entry.</li>
+        <li>Supports character cycling, deletion, and confirmation via remote buttons.</li>
+      </ul>
 
-  <h3>Hardware Setup</h3>
+      <p class="subheader">AWS (Cloud Leaderboard Integration)</p>
+      <ul>
+        <li>Connects to Wi-Fi using SimpleLink stack.</li>
+        <li>Sends winner’s name to AWS IoT via HTTPS POST.</li>
+        <li>AWS Rule updates Google Sheets-based leaderboard.</li>
+      </ul>
 
-  <p class="subheader">Accelerometer (I2C - Player 1)</p>
-  <ul>
-    <li>Initialize CC3200 Dev Pin 2 (I2C SDA)</li>
-    <li>Initialize CC3200 8Dev Pin 1 (I2C SCL)</li>
-    <li>Pins 1 and 2 are reserved exclusively for I2C use.</li>
-  </ul>
+      <h3>Hardware Setup</h3>
 
-  <p class="subheader">Adafruit LED Matrix (SPI - Display)</p>
-  <ul>
-    <li>CC3200 3.3V Pin to Adafruit V+</li>
-    <li>CC3200 GND pin to Adafruit G</li>
-    <li>CC3200 Dev Pin 5 to Adafruit CLK (clock)</li>
-    <li>CC3200 Dev Pin 7 to SI (MOSI/Data In) to Dev Pin 7</li>
-    <li>CC3200 Dev Pin 15 to Adafruit OC</li>
-    <li>CC3200 Dev Pin 18 to Adafruit R (reset)</li>
-    <li>CC3200 Dev Pin 21 to Adafruit DC</li>
-  </ul>
+      <p class="subheader">Accelerometer (I2C - Player 1)</p>
+      <ul>
+        <li>Initialize CC3200 Dev Pin 2 (I2C SDA)</li>
+        <li>Initialize CC3200 Dev Pin 1 (I2C SCL)</li>
+        <li>Pins 1 and 2 are reserved exclusively for I2C use.</li>
+      </ul>
 
-  <p class="subheader">IR Receiver (IR - Player 2 + Text Input)</p>
-  <ul>
-    <li>CC3200 3.3V Pin to IR receiver V+ leg (through 100 Ohm resistor)</li>
-    <li>CC3200 3.3V Pin to IR receiver G leg (through 100μF capacitor)</li>
-    <li>CC3200 GND Pin to IR receiver G leg</li>
-    <li>CC3200 Dev Pin 63 to IR receiver data out leg</li>
-  </ul>
+      <p class="subheader">Adafruit LED Matrix (SPI - Display)</p>
+      <ul>
+        <li>CC3200 3.3V Pin to Adafruit V+</li>
+        <li>CC3200 GND Pin to Adafruit G</li>
+        <li>CC3200 Dev Pin 5 to Adafruit CLK (Clock)</li>
+        <li>CC3200 Dev Pin 7 to Adafruit SI (MOSI/Data In)</li>
+        <li>CC3200 Dev Pin 15 to Adafruit OC (Chip Select)</li>
+        <li>CC3200 Dev Pin 18 to Adafruit R (Reset)</li>
+        <li>CC3200 Dev Pin 21 to Adafruit DC (Data/Command)</li>
+      </ul>
+
+      <p class="subheader">IR Receiver (IR - Player 2 + Text Input)</p>
+      <ul>
+        <li>3.3V to IR V+ (through 100Ω resistor)</li>
+        <li>GND to IR G (with 100μF capacitor across power and ground)</li>
+        <li>Dev Pin 63 to IR OUT (data)</li>
+      </ul>
+    </div>
+
+    <div class="sidebar">
+      <div class="video-container">
+        <iframe 
+          src="https://www.youtube.com/embed/VIDEO_ID" 
+          title="Demo Video"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <div class="leaderboard">
+        <h3>Live Leaderboard</h3>
+        <ul id="leaderboard-list">
+          <li>AAA – 5 Wins</li>
+          <li>BOB – 3 Wins</li>
+          <li>XYZ – 2 Wins</li>
+          <!-- This could be dynamically updated via JavaScript fetching from AWS -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
