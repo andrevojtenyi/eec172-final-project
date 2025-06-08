@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Dual Control Pong</title>
   <style>
     body {
@@ -12,7 +12,7 @@
       margin: auto;
     }
 
-    h1, h2, p {
+    h1, h2, h3, p {
       text-align: left;
       color: #333;
     }
@@ -28,10 +28,28 @@
       color: #555;
       margin-bottom: 1em;
     }
+    
+    h3 {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-top: 2em;
+      margin-bottom: 0.5em;
+      color: #444;
+    }
 
     p {
       font-size: 1em;
       line-height: 1.6;
+      margin-bottom: 1em;
+    }
+
+    ul {
+      margin-left: 20px;
+      margin-bottom: 1em;
+    }
+
+    li {
+      margin-bottom: 0.5em;
     }
   </style>
 </head>
@@ -39,7 +57,42 @@
   <h1>Dual Control Pong</h1>
   <h2>EEC 172 Spring 2025 Final Project</h2>
   <p>
-    A simple game of Pong played with two different controllers. Player 1 uses a CC3200's accelerometer to control their paddle by tilting the board, while Player 2 uses an IR remote to move their paddle with UP and DOWN buttons. After a player wins, they're prompted to enter a three-letter name, which is then used to update a leaderboard tracking the number of wins per player.
+    A simple game of Pong played with two different controllers. Player 1's paddle is controlled by the accelerometer on the CC3200, allowing the user to move their paddle by tilting the board. Player 2's paddle is controlled by the IR receiver and remote combo, allowing the user to move their paddle with the UP and DOWN buttons on an AT&T remote. After a player wins, they're prompted to enter a three-letter name, which is then used to update a leaderboard tracking the number of wins per player.
+  </p>
+
+  <h3>Project Summary: Emphasis on Documentation and Reproducibility</h3>
+  <p>
+    This project implements a dual-controller Pong game on the CC3200 microcontroller, using an LED matrix display, an accelerometer, an IR remote, and cloud integration via AWS. The system is modular and thoroughly documented to enable reproducibility.
+  </p>
+  
+  <h3>Program Flow</h3>
+  <p>
+    The game initializes by setting up a visual interface: two paddles, a dashed midline, a ball, and a score display. Gameplay logic is physics-based: the ball bounces off walls and paddles, with increasing speed and directional variation based on paddle velocity at impact. Scoring triggers a board reset and continues until one player reaches the target score. After a win, the player enters a three-letter name using an IR remote, which is displayed live on the LED and submitted via AWS to a cloud-based leaderboard.
+  </p>
+
+  <h3>Functional Components</h3>
+  <ul>
+    <li>
+      <strong>I2C – Accelerometer Input (Player 1):</strong>
+      Reads X-axis tilt to control paddle movement. Minor tilts are filtered to eliminate noise. Utilizes I2C communication with continuous polling for real-time responsiveness.
+    </li>
+    <li>
+      <strong>SPI – Display Output:</strong>
+      Handles all graphical output to the Adafruit LED matrix. Utilizes Adafruit’s drawing functions to manage visual updates. Pin wiring and usage are clearly documented.
+    </li>
+    <li>
+      <strong>IR – Remote Input (Player 2 & Text Entry):</strong>
+      Decodes IR pulses to map buttons to paddle movement and multi-tap text input. Implements timer interrupts for character cycling, deletion, and confirmation. All decoding logic is documented.
+    </li>
+    <li>
+      <strong>AWS – Cloud Integration:</strong>
+      Sends the winning player’s name securely via HTTPS POST to AWS IoT device shadow, which updates a Google Sheets leaderboard. Includes Wi-Fi connection and secure transmission logic.
+    </li>
+  </ul>
+
+  <h3>Reproducibility and Documentation</h3>
+  <p>
+    Code and wiring are annotated with clear pin mappings and logic descriptions. The modular structure separates gameplay, input handling, display updates, and cloud communication for ease of debugging and reuse. IR codes and multi-tap mappings are logged for consistent interpretation across remotes. All dependencies and setup instructions for libraries, AWS, and hardware are fully documented, ensuring that another developer can recreate the system independently.
   </p>
 </body>
 </html>
