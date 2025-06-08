@@ -28,7 +28,7 @@
       color: #555;
       margin-bottom: 1em;
     }
-    
+
     h3 {
       font-size: 1.1em;
       font-weight: bold;
@@ -51,6 +51,14 @@
     li {
       margin-bottom: 0.5em;
     }
+
+    .subheader {
+      font-weight: bold;
+      margin-top: 1.5em;
+      margin-bottom: 0.3em;
+      color: #444;
+      padding-left: 1em;
+    }
   </style>
 </head>
 <body>
@@ -61,7 +69,7 @@
   <p>
     This project implements a dual-controller Pong game on the CC3200 microcontroller, using an LED matrix display, an accelerometer, an IR remote, and cloud integration via AWS. The system is modular and thoroughly documented to enable reproducibility.
   </p>
-  
+
   <h3>Program Flow</h3>
   <p>
     The game initializes by setting up a visual interface: two paddles, a dashed midline, a ball, and a score display. Gameplay logic is physics-based: the ball bounces off walls and paddles, with increasing speed and directional variation based on paddle velocity at impact. Scoring triggers a board reset and continues until one player reaches the target score. After a win, the player enters a three-letter name using an IR remote, which is displayed live on the LED and submitted via AWS to a cloud-based leaderboard.
@@ -69,72 +77,69 @@
 
   <h3>Functional Components</h3>
 
-<p><strong>I2C (Accelerometer - Player 1):</strong></p>
-<ul>
-  <li>Uses I2C communication to continuously poll X-axis tilt data.</li>
-  <li>Converts tilt into paddle movement for Player 1.</li>
-  <li>Ignores minor movements to prevent jitter.</li>
-</ul>
+  <p class="subheader">I2C (Accelerometer - Player 1)</p>
+  <ul>
+    <li>Uses I2C communication to continuously poll X-axis tilt data.</li>
+    <li>Converts tilt into paddle movement for Player 1.</li>
+    <li>Ignores minor movements to prevent jitter.</li>
+  </ul>
 
-<p><strong>SPI (LED Matrix Display):</strong></p>
-<ul>
-  <li>Renders ball, paddles, midline, score, and prompts on the display.</li>
-  <li>Uses Adafruit graphics library functions (e.g., <code>drawChar</code>, <code>fillRect</code>).</li>
-  <li>Clears and redraws objects to simulate motion.</li>
-</ul>
+  <p class="subheader">SPI (LED Matrix Display)</p>
+  <ul>
+    <li>Renders ball, paddles, midline, score, and prompts on the display.</li>
+    <li>Uses Adafruit graphics library functions (e.g., <code>drawChar</code>, <code>fillRect</code>).</li>
+    <li>Clears and redraws objects to simulate motion.</li>
+  </ul>
 
-<p><strong>IR (Remote Input - Player 2 & Name Entry):</strong></p>
-<ul>
-  <li>Decodes IR signals to control Player 2’s paddle (UP/DOWN).</li>
-  <li>Implements multi-tap text input for name entry.</li>
-  <li>Supports character cycling, deletion, and confirmation via remote buttons.</li>
-</ul>
+  <p class="subheader">IR (Remote Input - Player 2 & Name Entry)</p>
+  <ul>
+    <li>Decodes IR signals to control Player 2’s paddle (UP/DOWN).</li>
+    <li>Implements multi-tap text input for name entry.</li>
+    <li>Supports character cycling, deletion, and confirmation via remote buttons.</li>
+  </ul>
 
-<p><strong>AWS (Cloud Leaderboard Integration):</strong></p>
-<ul>
-  <li>Connects to Wi-Fi using SimpleLink stack.</li>
-  <li>Sends winner’s name to AWS IoT via HTTPS POST.</li>
-  <li>AWS Rule updates Google Sheets-based leaderboard.</li>
-</ul>
+  <p class="subheader">AWS (Cloud Leaderboard Integration)</p>
+  <ul>
+    <li>Connects to Wi-Fi using SimpleLink stack.</li>
+    <li>Sends winner’s name to AWS IoT via HTTPS POST.</li>
+    <li>AWS Rule updates Google Sheets-based leaderboard.</li>
+  </ul>
+
   <h3>Hardware Setup & Wiring Instructions</h3>
-<p>
-  To ensure reproducibility, the following outlines the exact wiring configuration for each hardware component connected to the CC3200:
-</p>
+  <p>
+    To ensure reproducibility, the following outlines the exact wiring configuration for each hardware component connected to the CC3200:
+  </p>
 
-<ul>
-  <li>
-    <strong>Accelerometer (I2C - Player 1):</strong><br />
-    - Connect SDA (data) to Dev Pin 2<br />
-    - Connect SCL (clock) to Dev Pin 1<br />
-    - Connect VCC to 3.3V<br />
-    - Connect GND to Ground<br />
-    - Note: Pins 1 and 2 are reserved exclusively for I2C use.
-  </li>
+  <p class="subheader">Accelerometer (I2C - Player 1)</p>
+  <ul>
+    <li>Connect SDA (data) to Dev Pin 2</li>
+    <li>Connect SCL (clock) to Dev Pin 1</li>
+    <li>Connect VCC to 3.3V</li>
+    <li>Connect GND to Ground</li>
+    <li>Note: Pins 1 and 2 are reserved exclusively for I2C use.</li>
+  </ul>
 
-  <li>
-    <strong>Adafruit LED Matrix (SPI - Display):</strong><br />
-    - Reset → Dev Pin 18<br />
-    - CS (Chip Select) → Dev Pin 15<br />
-    - CLK (Clock) → Dev Pin 5<br />
-    - SI (MOSI/Data In) → Dev Pin 7<br />
-    - DC (Data/Command) → Dev Pin 21<br />
-    - VCC → 3.3V<br />
-    - GND → Ground
-  </li>
+  <p class="subheader">Adafruit LED Matrix (SPI - Display)</p>
+  <ul>
+    <li>Reset → Dev Pin 18</li>
+    <li>CS (Chip Select) → Dev Pin 15</li>
+    <li>CLK (Clock) → Dev Pin 5</li>
+    <li>SI (MOSI/Data In) → Dev Pin 7</li>
+    <li>DC (Data/Command) → Dev Pin 21</li>
+    <li>VCC → 3.3V</li>
+    <li>GND → Ground</li>
+  </ul>
 
-  <li>
-    <strong>IR Receiver (IR - Player 2 + Input):</strong><br />
-    - Vs (Power) → 3.3V (through 100Ω resistor)<br />
-    - GND → Ground (with 100μF capacitor across power and ground)<br />
-    - OUT → Dev Pin 63<br />
-    - Ensure stable power filtering to reduce signal noise.
-  </li>
-</ul>
+  <p class="subheader">IR Receiver (IR - Player 2 + Input)</p>
+  <ul>
+    <li>Vs (Power) → 3.3V (through 100Ω resistor)</li>
+    <li>GND → Ground (with 100μF capacitor across power and ground)</li>
+    <li>OUT → Dev Pin 63</li>
+    <li>Ensure stable power filtering to reduce signal noise.</li>
+  </ul>
 
-<p>
-  Double-check all wiring before powering the board. Use a breadboard and jumper wires for easy setup, and label each connection to reduce setup time and prevent errors during testing.
-</p>
-
-</ul>
+  <p>
+    Double-check all wiring before powering the board. Use a breadboard and jumper wires for easy setup, and label each connection to reduce setup time and prevent errors during testing.
+  </p>
 </body>
 </html>
