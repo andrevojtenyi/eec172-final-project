@@ -9,10 +9,11 @@
 
   <style>
     body {
+      box-sizing: border-box;
       font-family: Arial, sans-serif;
       background-color: #f5f5f5;
       margin: 0;
-      padding: 40px;
+      padding-top: 40px;
       height: 100vh;
       overflow: hidden;
       display: flex;
@@ -28,7 +29,7 @@
       height: 100%;
       gap: 40px;
     }
-    
+
     .main-content {
       flex: 1;
       max-width: 850px; 
@@ -241,7 +242,7 @@
 
   </div>
 
-    <script>
+  <script>
     const GOOGLE_SHEETS_JSON_URL = 'https://script.google.com/macros/s/AKfycbyW_AlJbNypAobtamA81SkEIeyZNxWLF3dunQiEu9d7kaDxwotMW56liWIk4M-giex9ag/exec';
 
     async function loadLeaderboard() {
@@ -262,8 +263,8 @@
 
         leaderboardList.innerHTML = '';
         data
-          .sort((a, b) => (parseInt(b.Count) || 0) - (parseInt(a.Count) || 0))  // Sort by Count descending
-          .slice(0, 5)  // Only top 5
+          .sort((a, b) => (parseInt(b.Count) || 0) - (parseInt(a.Count) || 0))
+          .slice(0, 5)
           .forEach(entry => {
             const name = entry.Prefix || '???';
             const wins = entry.Count || 0;
@@ -280,7 +281,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', loadLeaderboard);
-    setInterval(loadLeaderboard, 30000); // Refresh every 30 seconds
+    setInterval(loadLeaderboard, 30000);
   </script>
 
 </body>
