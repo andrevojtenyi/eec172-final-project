@@ -105,41 +105,32 @@
     <li>AWS Rule updates Google Sheets-based leaderboard.</li>
   </ul>
 
-  <h3>Hardware Setup & Wiring Instructions</h3>
-  <p>
-    To ensure reproducibility, the following outlines the exact wiring configuration for each hardware component connected to the CC3200:
-  </p>
+  <h3>Hardware Setup</h3>
 
   <p class="subheader">Accelerometer (I2C - Player 1)</p>
   <ul>
-    <li>Connect SDA (data) to Dev Pin 2</li>
-    <li>Connect SCL (clock) to Dev Pin 1</li>
-    <li>Connect VCC to 3.3V</li>
-    <li>Connect GND to Ground</li>
-    <li>Note: Pins 1 and 2 are reserved exclusively for I2C use.</li>
+    <li>Initialize CC3200 Dev Pin 2 (I2C SDA)</li>
+    <li>Initialize CC3200 8Dev Pin 1 (I2C SCL)</li>
+    <li>Pins 1 and 2 are reserved exclusively for I2C use.</li>
   </ul>
 
   <p class="subheader">Adafruit LED Matrix (SPI - Display)</p>
   <ul>
-    <li>Reset → Dev Pin 18</li>
-    <li>CS (Chip Select) → Dev Pin 15</li>
-    <li>CLK (Clock) → Dev Pin 5</li>
-    <li>SI (MOSI/Data In) → Dev Pin 7</li>
-    <li>DC (Data/Command) → Dev Pin 21</li>
-    <li>VCC → 3.3V</li>
-    <li>GND → Ground</li>
+    <li>CC3200 3.3V Pin to Adafruit V+</li>
+    <li>CC3200 GND pin to Adafruit G</li>
+    <li>CC3200 Dev Pin 5 to Adafruit CLK (clock)</li>
+    <li>CC3200 Dev Pin 7 to SI (MOSI/Data In) to Dev Pin 7</li>
+    <li>CC3200 Dev Pin 15 to Adafruit OC</li>
+    <li>CC3200 Dev Pin 18 to Adafruit R (reset)</li>
+    <li>CC3200 Dev Pin 21 to Adafruit DC</li>
   </ul>
 
-  <p class="subheader">IR Receiver (IR - Player 2 + Input)</p>
+  <p class="subheader">IR Receiver (IR - Player 2 + Text Input)</p>
   <ul>
-    <li>Vs (Power) → 3.3V (through 100Ω resistor)</li>
-    <li>GND → Ground (with 100μF capacitor across power and ground)</li>
-    <li>OUT → Dev Pin 63</li>
-    <li>Ensure stable power filtering to reduce signal noise.</li>
+    <li>CC3200 3.3V Pin to IR receiver V+ leg (through 100 Ohm resistor)</li>
+    <li>CC3200 3.3V Pin to IR receiver G leg (through 100μF capacitor)</li>
+    <li>CC3200 GND Pin to IR receiver G leg</li>
+    <li>CC3200 Dev Pin 63 to IR receiver data out leg</li>
   </ul>
-
-  <p>
-    Double-check all wiring before powering the board. Use a breadboard and jumper wires for easy setup, and label each connection to reduce setup time and prevent errors during testing.
-  </p>
 </body>
 </html>
