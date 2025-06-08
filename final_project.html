@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>Dual Control Pong</title>
+
+  <!-- Retro Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -75,7 +79,7 @@
       margin-top: 1.5em;
       margin-bottom: 0.3em;
       color: #444;
-      margin-left: 15px; 
+      margin-left: 15px;
     }
 
     .video-container iframe {
@@ -87,18 +91,31 @@
 
     .leaderboard {
       margin-top: 40px;
-      padding: 10px;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 20px;
+      background-color: #111;
+      border: 4px solid #0ff;
+      border-radius: 8px;
+      font-family: 'Press Start 2P', monospace;
+      color: #0ff;
+      box-shadow: 0 0 10px #0ff;
+      text-shadow: 0 0 3px #0ff;
     }
 
     .leaderboard h3 {
       margin-top: 0;
+      font-size: 0.8em;
+      color: #f0f;
+      text-shadow: 0 0 3px #f0f;
     }
 
     .leaderboard ul {
       padding-left: 20px;
+      list-style-type: square;
+    }
+
+    .leaderboard li {
+      margin-bottom: 10px;
+      font-size: 0.7em;
     }
   </style>
 </head>
