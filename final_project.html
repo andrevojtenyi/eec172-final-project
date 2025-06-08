@@ -121,7 +121,8 @@
     .leaderboard h3 {
       color: #f0f;
       text-shadow: 0 0 10px #f0f;
-      margin-bottom: 20px;
+      margin-top: 0;
+      margin-bottom: 10px;
       font-size: 1.1em;
     }
 
@@ -240,44 +241,5 @@
 
   </div>
 
- <script>
-  const GOOGLE_SHEETS_JSON_URL = 'https://script.google.com/macros/s/AKfycbyW_AlJbNypAobtamA81SkEIeyZNxWLF3dunQiEu9d7kaDxwotMW56liWIk4M-giex9ag/exec';
-
-  async function loadLeaderboard() {
-    const leaderboardList = document.getElementById('leaderboard-list');
-    const errorMsg = document.getElementById('error-msg');
-
-    try {
-      errorMsg.style.display = 'none';
-      const response = await fetch(GOOGLE_SHEETS_JSON_URL);
-      if (!response.ok) throw new Error('Failed to fetch leaderboard.');
-
-      const data = await response.json();
-
-      if (!data || data.length === 0) {
-        leaderboardList.innerHTML = '<li>No leaderboard data available.</li>';
-        return;
-      }
-
-      leaderboardList.innerHTML = '';
-      data.forEach(entry => {
-        const name = entry.Prefix || '???';
-        const wins = entry.Count || 0;
-        const li = document.createElement('li');
-        li.textContent = `${name.toUpperCase()} – ${wins} Wins`;
-        leaderboardList.appendChild(li);
-      });
-    } catch (error) {
-      leaderboardList.innerHTML = '<li>Failed to load leaderboard.</li>';
-      errorMsg.textContent = error.message;
-      errorMsg.style.display = 'block';
-      console.error('Leaderboard load error:', error);
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', loadLeaderboard);
-  setInterval(loadLeaderboard, 30000); // Refresh every 30 seconds
-</script>
-
-</body>
-</html>
+  <script>
+    const GOOGLE_SHEETS_JSON_URL = 'https://script.google.com/macros/s/AKfycbyW_AlJbNypAobtamA81SkEIeyZNxWLF3dunQiEu
