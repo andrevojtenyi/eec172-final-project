@@ -68,28 +68,11 @@
   </p>
 
   <h3>Functional Components</h3>
-  <ul>
-    <li>
-      <strong>I2C – Accelerometer Input (Player 1):</strong>
-      Reads X-axis tilt to control paddle movement. Minor tilts are filtered to eliminate noise. Utilizes I2C communication with continuous polling for real-time responsiveness.
-    </li>
-    <li>
-      <strong>SPI – Display Output:</strong>
-      Handles all graphical output to the Adafruit LED matrix. Utilizes Adafruit’s drawing functions to manage visual updates. Pin wiring and usage are clearly documented.
-    </li>
-    <li>
-      <strong>IR – Remote Input (Player 2 & Text Entry):</strong>
-      Decodes IR pulses to map buttons to paddle movement and multi-tap text input. Implements timer interrupts for character cycling, deletion, and confirmation. All decoding logic is documented.
-    </li>
-    <li>
-      <strong>AWS – Cloud Integration:</strong>
-      Sends the winning player’s name securely via HTTPS POST to AWS IoT device shadow, which updates a Google Sheets leaderboard. Includes Wi-Fi connection and secure transmission logic.
-    </li>
-  </ul>
-
-  <h3>Reproducibility and Documentation</h3>
-  <p>
-    Code and wiring are annotated with clear pin mappings and logic descriptions. The modular structure separates gameplay, input handling, display updates, and cloud communication for ease of debugging and reuse. IR codes and multi-tap mappings are logged for consistent interpretation across remotes. All dependencies and setup instructions for libraries, AWS, and hardware are fully documented, ensuring that another developer can recreate the system independently.
-  </p>
+<ul>
+  <li><strong>I2C:</strong> Reads tilt data from a 3-axis accelerometer to control Player 1’s paddle.</li>
+  <li><strong>SPI:</strong> Handles graphical output to the Adafruit LED matrix (ball, paddles, score, and prompts).</li>
+  <li><strong>IR:</strong> Receives input from a remote to control Player 2’s paddle and enter the winner’s name using a multi-tap input method.</li>
+  <li><strong>AWS:</strong> Sends the winner’s name to a cloud leaderboard using HTTPS POST and an AWS IoT rule.</li>
+</ul>
 </body>
 </html>
