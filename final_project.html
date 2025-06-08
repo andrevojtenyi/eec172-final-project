@@ -68,11 +68,73 @@
   </p>
 
   <h3>Functional Components</h3>
+
+<p><strong>I2C (Accelerometer - Player 1):</strong></p>
 <ul>
-  <li><strong>I2C:</strong> Reads tilt data from a 3-axis accelerometer to control Player 1’s paddle.</li>
-  <li><strong>SPI:</strong> Handles graphical output to the Adafruit LED matrix (ball, paddles, score, and prompts).</li>
-  <li><strong>IR:</strong> Receives input from a remote to control Player 2’s paddle and enter the winner’s name using a multi-tap input method.</li>
-  <li><strong>AWS:</strong> Sends the winner’s name to a cloud leaderboard using HTTPS POST and an AWS IoT rule.</li>
+  <li>Uses I2C communication to continuously poll X-axis tilt data.</li>
+  <li>Converts tilt into paddle movement for Player 1.</li>
+  <li>Ignores minor movements to prevent jitter.</li>
+</ul>
+
+<p><strong>SPI (LED Matrix Display):</strong></p>
+<ul>
+  <li>Renders ball, paddles, midline, score, and prompts on the display.</li>
+  <li>Uses Adafruit graphics library functions (e.g., <code>drawChar</code>, <code>fillRect</code>).</li>
+  <li>Clears and redraws objects to simulate motion.</li>
+</ul>
+
+<p><strong>IR (Remote Input - Player 2 & Name Entry):</strong></p>
+<ul>
+  <li>Decodes IR signals to control Player 2’s paddle (UP/DOWN).</li>
+  <li>Implements multi-tap text input for name entry.</li>
+  <li>Supports character cycling, deletion, and confirmation via remote buttons.</li>
+</ul>
+
+<p><strong>AWS (Cloud Leaderboard Integration):</strong></p>
+<ul>
+  <li>Connects to Wi-Fi using SimpleLink stack.</li>
+  <li>Sends winner’s name to AWS IoT via HTTPS POST.</li>
+  <li>AWS Rule updates Google Sheets-based leaderboard.</li>
+</ul>
+  <h3>Hardware Setup & Wiring Instructions</h3>
+<p>
+  To ensure reproducibility, the following outlines the exact wiring configuration for each hardware component connected to the CC3200:
+</p>
+
+<ul>
+  <li>
+    <strong>Accelerometer (I2C - Player 1):</strong><br />
+    - Connect SDA (data) to Dev Pin 2<br />
+    - Connect SCL (clock) to Dev Pin 1<br />
+    - Connect VCC to 3.3V<br />
+    - Connect GND to Ground<br />
+    - Note: Pins 1 and 2 are reserved exclusively for I2C use.
+  </li>
+
+  <li>
+    <strong>Adafruit LED Matrix (SPI - Display):</strong><br />
+    - Reset → Dev Pin 18<br />
+    - CS (Chip Select) → Dev Pin 15<br />
+    - CLK (Clock) → Dev Pin 5<br />
+    - SI (MOSI/Data In) → Dev Pin 7<br />
+    - DC (Data/Command) → Dev Pin 21<br />
+    - VCC → 3.3V<br />
+    - GND → Ground
+  </li>
+
+  <li>
+    <strong>IR Receiver (IR - Player 2 + Input):</strong><br />
+    - Vs (Power) → 3.3V (through 100Ω resistor)<br />
+    - GND → Ground (with 100μF capacitor across power and ground)<br />
+    - OUT → Dev Pin 63<br />
+    - Ensure stable power filtering to reduce signal noise.
+  </li>
+</ul>
+
+<p>
+  Double-check all wiring before powering the board. Use a breadboard and jumper wires for easy setup, and label each connection to reduce setup time and prevent errors during testing.
+</p>
+
 </ul>
 </body>
 </html>
