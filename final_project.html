@@ -8,37 +8,35 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
   <style>
-    html, body {
-      height: 100%;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
       margin: 0;
       padding: 40px;
-      background-color: #f5f5f5;
-      font-family: Arial, sans-serif;
+      height: 100vh;
+      overflow: hidden; /* Prevent whole page scroll */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
     }
 
     .container {
       display: flex;
-      max-width: 960px; /* Adjusted to 700 + 240 + gap */
-      height: calc(100vh - 80px); /* full viewport height minus body padding */
-      margin: 0 auto;
+      flex-direction: row;
+      max-width: 1200px;
+      width: 100%;
+      height: 100%;
       gap: 40px;
     }
 
+    /* LEFT SIDE: Scrollable */
     .main-content {
       flex: 1;
       max-width: 700px;
-      overflow-y: auto;    /* enable vertical scroll */
-      padding-right: 10px; /* avoid scrollbar overlap */
-      border-right: 1px solid #ccc; /* optional visual separation */
-    }
-
-    .sidebar {
-      width: 240px;          /* exactly the video width */
-      position: sticky;      /* keeps sidebar visible */
-      top: 40px;             /* offset equal to body padding */
-      height: calc(100vh - 80px);
-      overflow: visible;
-      flex-shrink: 0;        /* prevent shrinking */
+      height: 100%;
+      overflow-y: auto;
+      padding-right: 10px;
+      box-sizing: border-box;
     }
 
     h1, h2, h3, p {
@@ -85,52 +83,76 @@
       margin-top: 1.5em;
       margin-bottom: 0.3em;
       color: #444;
-      margin-left: 15px; /* shifted right */
+      margin-left: 20px; /* shifted right */
     }
 
+    /* RIGHT SIDE: Fixed width, stacked video + leaderboard */
+    .sidebar {
+      flex: none;
+      width: 260px; /* match video width + some padding */
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      position: sticky;
+      top: 40px;
+      height: fit-content;
+      align-self: flex-start;
+    }
+
+    /* Video container for vertical Shorts */
     .video-container iframe {
-      width: 240px;
-      height: 426px;
+      width: 260px;
+      height: 460px;
       border: none;
       border-radius: 8px;
-      display: block;
-      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
-    /* Retro Themed Leaderboard */
+    /* Retro-themed leaderboard */
     .leaderboard {
       padding: 20px;
-      background-color: #111;
+      background-color: #000;
       border: 4px solid #0ff;
       border-radius: 8px;
+      box-shadow: 0 0 15px #0ff;
+      text-align: center;
       font-family: 'Press Start 2P', monospace;
       color: #0ff;
-      box-shadow: 0 0 10px #0ff;
-      text-shadow: 0 0 3px #0ff;
+      font-size: 0.8em;
+      user-select: none;
     }
 
     .leaderboard h3 {
-      margin-top: 0;
-      font-size: 0.8em;
       color: #f0f;
-      text-shadow: 0 0 3px #f0f;
-      margin-bottom: 15px;
+      text-shadow: 0 0 10px #f0f;
+      margin-bottom: 20px;
+      font-size: 1.1em;
     }
 
     .leaderboard ul {
-      padding-left: 20px;
-      list-style-type: square;
+      list-style-type: none;
+      padding-left: 0;
+      margin: 0;
     }
 
     .leaderboard li {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px dotted #0ff;
+      padding-bottom: 6px;
+    }
+
+    .error {
+      color: #f00;
       font-size: 0.7em;
+      margin-top: 10px;
+      font-family: Arial, sans-serif;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
+
     <div class="main-content">
       <h1>Dual Control Pong</h1>
       <h2>EEC 172 Spring 2025 Final Project</h2>
@@ -151,7 +173,6 @@
       <ul>
         <li>Uses I2C communication to continuously poll X-axis tilt data.</li>
         <li>Converts tilt into paddle movement for Player 1.</li>
-        <li>Ignores minor movements to prevent jitter.</li>
       </ul>
 
       <p class="subheader">SPI (LED Matrix Display)</p>
@@ -205,24 +226,62 @@
 
     <div class="sidebar">
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube.com/embed/VIDEO_ID" 
+        <iframe
+          src="https://www.youtube.com/embed/VIDEO_ID?autoplay=0&mute=1&controls=1"
           title="Demo Video"
-          allowfullscreen>
-        </iframe>
+          allowfullscreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          loading="lazy"
+        ></iframe>
       </div>
 
       <div class="leaderboard">
         <h3>Live Leaderboard</h3>
         <ul id="leaderboard-list">
-          <li>AAA – 5 Wins</li>
-          <li>BOB – 3 Wins</li>
-          <li>XYZ – 2 Wins</li>
-          <!-- Dynamic leaderboard can go here -->
+          <li>Loading leaderboard...</li>
         </ul>
+        <div id="error-msg" class="error" style="display:none;"></div>
       </div>
     </div>
+
   </div>
+
+  <script>
+    async function loadLeaderboard() {
+      const leaderboardList = document.getElementById('leaderboard-list');
+      const errorMsg = document.getElementById('error-msg');
+
+      try {
+        errorMsg.style.display = 'none';
+        const response = await fetch('YOUR_WEB_APP_URL_HERE');
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const data = await response.json();
+
+        if (!data || data.length === 0) {
+          leaderboardList.innerHTML = '<li>No leaderboard data available.</li>';
+          return;
+        }
+
+        leaderboardList.innerHTML = '';
+        data.forEach(entry => {
+          const name = entry.Name || "???";
+          const wins = entry.Wins || 0;
+          const li = document.createElement('li');
+          li.textContent = `${name} – ${wins} Wins`;
+          leaderboardList.appendChild(li);
+        });
+      } catch (error) {
+        leaderboardList.innerHTML = '<li>Failed to load leaderboard.</li>';
+        errorMsg.textContent = error.message;
+        errorMsg.style.display = 'block';
+        console.error('Error loading leaderboard:', error);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadLeaderboard);
+    setInterval(loadLeaderboard, 30000);
+  </script>
 
 </body>
 </html>
