@@ -14,7 +14,7 @@
       margin: 0;
       padding: 40px;
       height: 100vh;
-      overflow: hidden; /* Prevent whole page scroll */
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -28,11 +28,10 @@
       height: 100%;
       gap: 40px;
     }
-
-    /* LEFT SIDE: Scrollable */
+    
     .main-content {
       flex: 1;
-      max-width: 750px; /* increased from 700px */
+      max-width: 850px; 
       height: 100%;
       overflow-y: auto;
       padding-right: 10px;
@@ -83,13 +82,12 @@
       margin-top: 1.5em;
       margin-bottom: 0.3em;
       color: #444;
-      margin-left: 20px; /* shifted right */
+      margin-left: 20px;
     }
 
-    /* RIGHT SIDE: Fixed width, stacked video + leaderboard */
     .sidebar {
       flex: none;
-      width: 210px; /* reduced from 260px */
+      width: 160px;
       display: flex;
       flex-direction: column;
       gap: 30px;
@@ -99,16 +97,14 @@
       align-self: flex-start;
     }
 
-    /* Video container for vertical Shorts */
     .video-container iframe {
-      width: 210px; /* match sidebar width */
+      width: 160px; 
       height: 460px;
       border: none;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
-    /* Retro-themed leaderboard */
     .leaderboard {
       padding: 20px;
       background-color: #000;
@@ -245,13 +241,15 @@
   </div>
 
   <script>
+    const GOOGLE_SHEETS_JSON_URL = 'YOUR_GOOGLE_SHEETS_JSON_URL';
+
     async function loadLeaderboard() {
       const leaderboardList = document.getElementById('leaderboard-list');
       const errorMsg = document.getElementById('error-msg');
 
       try {
         errorMsg.style.display = 'none';
-        const response = await fetch('YOUR_WEB_APP_URL_HERE');
+        const response = await fetch(GOOGLE_SHEETS_JSON_URL);
         if (!response.ok) throw new Error('Network response was not ok');
 
         const data = await response.json();
@@ -262,13 +260,17 @@
         }
 
         leaderboardList.innerHTML = '';
+
+        data.sort((a, b) => (b.Count || 0) - (a.Count || 0));
+
         data.forEach(entry => {
-          const name = entry.Name || "???";
-          const wins = entry.Wins || 0;
+          const name = entry.Prefix || "???";
+          const wins = entry.Count || 0;
           const li = document.createElement('li');
           li.textContent = `${name} – ${wins} Wins`;
           leaderboardList.appendChild(li);
         });
+
       } catch (error) {
         leaderboardList.innerHTML = '<li>Failed to load leaderboard.</li>';
         errorMsg.textContent = error.message;
