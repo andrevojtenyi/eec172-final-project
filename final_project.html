@@ -39,7 +39,7 @@
   <h1>Dual Control Pong</h1>
   <h2>EEC 172 Spring 2025 Final Project</h2>
   <p>
-    A simple game of Pong played with two different controllers. One of the paddles is controlled by the accelerometer on the CC3200, and the second one is controlled by the IR receiver and remote combo. After the game is over, the winning player is prompted to enter a three-letter name using the same algorithm as the one we wrote in Lab 3. AWS IoT is then used to send the name to a Google Sheets, which tracks and ranks the number of wins per name, which is then supposed to be displayed as a leaderboard.
+    A simple game of Pong played with two different controllers. Player 1 uses a CC3200's accelerometer to control their paddle by tilting the board, while Player 2 uses an IR remote to move their paddle with UP and DOWN buttons. After a player wins, they're prompted to enter a three-letter name, which is then used to update a leaderboard tracking the number of wins per player.
   </p>
 </body>
 </html>
