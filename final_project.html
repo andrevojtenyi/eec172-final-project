@@ -32,7 +32,7 @@
     /* LEFT SIDE: Scrollable */
     .main-content {
       flex: 1;
-      max-width: 700px;
+      max-width: 750px; /* increased from 700px */
       height: 100%;
       overflow-y: auto;
       padding-right: 10px;
@@ -89,7 +89,7 @@
     /* RIGHT SIDE: Fixed width, stacked video + leaderboard */
     .sidebar {
       flex: none;
-      width: 260px; /* match video width + some padding */
+      width: 210px; /* reduced from 260px */
       display: flex;
       flex-direction: column;
       gap: 30px;
@@ -101,7 +101,7 @@
 
     /* Video container for vertical Shorts */
     .video-container iframe {
-      width: 260px;
+      width: 210px; /* match sidebar width */
       height: 460px;
       border: none;
       border-radius: 8px;
